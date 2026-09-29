@@ -560,6 +560,7 @@ function updateHUD() {
   const licenseEl = $("#license-status");
   licenseEl.textContent = state.license ? "YES" : "NO";
   licenseEl.className = `status-value ${state.license ? "yes" : "no"}`;
+  $("#credits-value").textContent = state.credits;
   $("#speed-value").textContent = state.mode === "drive" ? Math.round(Math.abs(state.car.speed) * 3.6) : "0";
   $("#wanted-stars").textContent = "★".repeat(state.wanted) + "☆".repeat(5 - state.wanted);
   if (state.test.active) {
@@ -576,7 +577,9 @@ function updateHUD() {
     if (target) missionMarker.position.set(target.x, .2, target.z);
   } else {
     $("#test-panel").classList.add("hidden");
-    $("#objective-text").textContent = state.license ? "Explore the district — drive safe" : "Walk to the DMV to get your licence";
+    $("#objective-text").textContent = state.license
+      ? (state.completedMissions.length ? "Credits secured — open Missions for your next contract" : "Explore the district — drive safe")
+      : "Walk to the DMV to get your licence";
   }
 }
 let toastTimeout;
