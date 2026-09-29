@@ -29,6 +29,8 @@ button { color: inherit; font: inherit; border: 0; cursor: pointer; }
 .wanted-card { border-left-color: var(--danger); min-width: 112px; }
 .world-clock { position: absolute; left: 26px; top: 178px; display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-left: 2px solid var(--cyan); background: var(--panel); backdrop-filter: blur(10px); }
 .world-clock span, .world-clock small { color: var(--muted); font: 600 9px var(--display); letter-spacing: .1em; }.world-clock strong { font: 700 18px var(--display); }.world-clock small { min-width: 36px; color: var(--orange); }
+.credits-card { position: absolute; left: 26px; top: 221px; min-width: 112px; padding: 7px 10px 6px; border-left: 2px solid var(--orange); background: var(--panel); backdrop-filter: blur(10px); }
+.credits-card strong { display: block; margin-top: 1px; color: var(--orange); font: 800 20px var(--display); letter-spacing: .04em; }
 .status-label, .eyebrow, .objective-kicker { display: block; color: var(--muted); font: 600 10px var(--display); letter-spacing: .15em; }
 .status-value, .speed-card strong { display: block; margin-top: 2px; font: 800 24px var(--display); letter-spacing: .05em; }
 .status-value.yes { color: var(--cyan); }.status-value.no { color: var(--danger); }
@@ -109,6 +111,7 @@ kbd { padding: 3px 5px; margin-right: 4px; border: 1px solid rgba(255,255,255,.2
   .status-strip { top: 56px; left: 14px; gap: 5px; }.status-card, .wanted-card { min-width: 88px; padding: 6px 8px; }.status-label { font-size: 8px; }.status-value, .speed-card strong { font-size: 20px; }
   .wanted-card { min-width: 93px; }.speed-card small { font-size: 8px; } #wanted-stars { font-size: 15px; }
   .world-clock { left: 14px; top: 121px; padding: 5px 8px; gap: 6px; }.world-clock strong { font-size: 16px; }.world-clock span, .world-clock small { font-size: 8px; }
+  .credits-card { left: 14px; top: 157px; min-width: 93px; padding: 5px 8px; }.credits-card strong { font-size: 18px; }.credits-card .status-label { font-size: 8px; }
   #minimap { top: 56px; right: 12px; width: 118px; height: 118px; }
   .objective { left: 14px; bottom: 197px; max-width: 235px; padding: 8px 10px; }.objective strong { font-size: 16px; }.objective-kicker { font-size: 8px; }
   .test-panel { top: 12px; right: 12px; width: 205px; padding: 10px; }.test-panel h2 { font-size: 18px; }.test-details { font-size: 9px; }
