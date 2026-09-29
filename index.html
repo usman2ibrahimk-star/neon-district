@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#09111d" />
+    <title>Neon District — Driving Licence</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main id="game">
+      <div id="render-layer"></div>
+
+      <section id="hud" aria-label="Game HUD">
+        <div class="brand"><span class="brand-mark">N</span><span>NEON DISTRICT</span></div>
+        <div class="hud-top-right">
+          <button id="missions-button" class="glass-button" type="button">◆ <span>Missions</span></button>
+          <button id="garage-button" class="glass-button" type="button">▰ <span>Garage</span></button>
+          <button id="inventory-button" class="glass-button" type="button">▣ <span>Inventory</span></button>
+          <button id="weather-button" class="glass-button" type="button" aria-label="Toggle rain" aria-pressed="false" title="Toggle rain"><b class="weather-icon">☂</b><span id="weather-label">DRY</span></button>
+          <button id="fullscreen-button" class="glass-button icon-button" type="button" aria-label="Toggle fullscreen">⛶</button>
+        </div>
+        <div class="status-strip">
+          <div class="status-card">
+            <span class="status-label">DRIVING LICENCE</span>
+            <strong id="license-status" class="status-value no">NO</strong>
+          </div>
+          <div class="status-card speed-card">
+            <span class="status-label">SPEED</span>
+            <strong><span id="speed-value">0</span><small> KM/H</small></strong>
+          </div>
+          <div class="wanted-card" id="wanted-card" aria-label="Police alert">
+            <span class="status-label">POLICE</span>
+            <span id="wanted-stars">☆☆☆☆☆</span>
+          </div>
+        </div>
+        <div class="world-clock"><span>LOCAL TIME</span><strong id="world-time">17:00</strong><small id="world-period">DUSK</small></div>
+        <div id="objective" class="objective">
+          <span class="objective-kicker">CURRENT OBJECTIVE</span>
+          <strong id="objective-text">Walk to the DMV to get your licence</strong>
+        </div>
+        <canvas id="minimap" width="180" height="180" aria-label="City minimap"></canvas>
+        <div id="desktop-controls" class="control-legend">
+          <span><kbd>WASD</kbd> MOVE / DRIVE</span>
+          <span><kbd>E</kbd> ENTER / EXIT</span>
+          <span><kbd>SHIFT</kbd> HANDBRAKE</span>
+          <span><kbd>CLICK + MOUSE</kbd> LOOK</span>
+        </div>
+      </section>
+
+      <section id="mobile-controls" aria-label="Touch controls">
+        <div id="joystick" class="joystick" aria-label="Virtual joystick">
+          <div class="joystick-ring"><div id="joystick-knob" class="joystick-knob"></div></div>
+          <span>MOVE</span>
+        </div>
+        <div class="touch-actions">
+          <button class="touch-button enter" data-action="interact" type="button"><span>↕</span><small>ENTER</small></button>
+          <button class="touch-button brake" data-action="brake" type="button"><span>◼</span><small>BRAKE</small></button>
+          <button class="touch-button accelerate" data-action="accelerate" type="button"><span>▲</span><small>GO</small></button>
+          <button class="touch-button handbrake" data-action="handbrake" type="button"><span>◆</span><small>HANDBRAKE</small></button>
+        </div>
+      </section>
+
+      <div id="toast" role="status" aria-live="polite"></div>
+
+      <section id="inventory-panel" class="panel hidden" aria-label="Inventory">
+        <div class="panel-header"><div><span class="eyebrow">PLAYER INVENTORY</span><h2>Carry items</h2></div><button class="close-button" data-close="inventory-panel" type="button">×</button></div>
+        <div id="inventory-items" class="inventory-items"></div>
+      </section>
+
+      <section id="missions-panel" class="panel hidden" aria-label="Missions">
+        <div class="panel-header"><div><span class="eyebrow">DISTRICT CONTRACTS</span><h2>Available missions</h2></div><button class="close-button" data-close="missions-panel" type="button">×</button></div>
+        <div id="mission-list" class="mission-list"></div>
+      </section>
+
+      <section id="garage-panel" class="panel hidden" aria-label="Garage customization">
+        <div class="panel-header"><div><span class="eyebrow">EASTSIDE GARAGE</span><h2>Build your ride</h2></div><button class="close-button" data-close="garage-panel" type="button">×</button></div>
+        <p class="panel-copy">Change the look and tune the handling of your current vehicle.</p>
+        <span class="garage-label">PAINT</span>
+        <div class="paint-options">
+          <button class="paint-swatch blue" data-paint="0" aria-label="Blue paint" type="button"></button>
+          <button class="paint-swatch amber" data-paint="1" aria-label="Amber paint" type="button"></button>
+          <button class="paint-swatch graphite" data-paint="2" aria-label="Graphite paint" type="button"></button>
+          <button class="paint-swatch violet" data-paint="3" aria-label="Violet paint" type="button"></button>
+        </div>
+        <span class="garage-label">PERFORMANCE</span>
+        <div class="upgrade-options">
+          <button class="upgrade-button" data-upgrade="engine" type="button"><strong>ENGINE</strong><small>Higher top speed</small><b id="engine-level">LV 1</b></button>
+          <button class="upgrade-button" data-upgrade="handling" type="button"><strong>HANDLING</strong><small>Sharper steering</small><b id="handling-level">LV 1</b></button>
+        </div>
+        <small class="garage-hint">Upgrades cost mission credits. Current balance: <b id="credit-balance">0</b></small>
+      </section>
+
+      <section id="test-panel" class="panel test-panel hidden" aria-label="Driving test status">
+        <div class="test-header"><div><span class="eyebrow">DMV PRACTICAL TEST</span><h2>Licence route</h2></div><div class="test-timer"><span id="test-time">90</span><small>SEC</small></div></div>
+        <div class="test-progress"><div id="test-progress-bar"></div></div>
+        <div class="test-details"><span>CHECKPOINT <b id="test-checkpoint">1 / 6</b></span><span>VIOLATIONS <b id="test-violations">0 / 3</b></span></div>
+      </section>
+
+      <div id="orientation-tip"><span>↻</span><strong>Landscape recommended</strong><small>Rotate your phone for the best drive.</small></div>
+      <section id="main-menu" class="main-menu" aria-label="Main menu">
+        <div class="menu-content">
+          <div class="menu-brand"><span class="brand-mark">N</span><span>NEON DISTRICT</span></div>
+          <p class="menu-kicker">OPEN CITY · YOUR OWN RULES</p>
+          <h1>THE CITY<br /><em>IS YOURS.</em></h1>
+          <p class="menu-intro">Earn your licence. Find your route. Make the district yours.</p>
+          <div class="save-heading"><span>SELECT A SAVE SLOT</span><small>Progress stays on this device</small></div>
+          <div id="save-slots" class="save-slots"></div>
+          <div class="menu-actions">
+            <button id="continue-button" class="menu-primary" type="button" disabled>CONTINUE</button>
+            <button id="new-game-button" class="menu-secondary" type="button">NEW GAME</button>
+          </div>
+          <div class="menu-footer"><span>WASD / JOYSTICK TO MOVE</span><span>DAY-NIGHT CYCLE · LOCAL SAVES</span></div>
+        </div>
+      </section>
+      <div id="loading"><div class="loading-logo">N</div><strong>BUILDING NEON DISTRICT</strong><span>Generating city blocks...</span></div>
+    </main>
+    <script type="module" src="./game.js"></script>
+  </body>
+</html>
